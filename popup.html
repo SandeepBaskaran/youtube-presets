@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>YouTube Presets</title>
+  <link rel="stylesheet" href="popup.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-left">
+      <img src="icons/icon32.png" alt="YouTube Presets" class="app-icon" />
+      <h1>YouTube Presets</h1>
+    </div>
+    <button id="createBtn" class="icon-btn" title="Create preset" aria-label="Create preset">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+    </button>
+  </header>
+
+  <section id="presets"></section>
+
+  <dialog id="createDialog">
+    <form method="dialog" id="createForm">
+      <h2>Create Preset</h2>
+
+      <label>
+        Name
+        <input type="text" id="name" required placeholder="e.g., Speedy 2x + Theater" />
+      </label>
+
+      <label>
+        Speed
+        <select id="speed">
+          <option value="1">1.0×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2" selected>2.0×</option>
+          <option value="2.5">2.5×</option>
+        </select>
+      </label>
+
+      <label>
+        Quality
+        <select id="quality">
+          <option value="max" selected>Max available</option>
+          <option value="2160">2160p</option>
+          <option value="1440">1440p</option>
+          <option value="1080">1080p</option>
+          <option value="720">720p</option>
+          <option value="auto">Auto</option>
+        </select>
+      </label>
+
+      <label>
+        View mode
+        <select id="viewMode">
+          <option value="default">Default</option>
+          <option value="theater">Theater</option>
+          <option value="fullscreen">Fullscreen</option>
+          <option value="pip">Picture-in-Picture</option>
+        </select>
+      </label>
+
+      <label class="row">
+        <span>Captions</span>
+        <select id="captions">
+          <option value="off" selected>Off</option>
+          <option value="on">On</option>
+        </select>
+      </label>
+
+      <label>
+        Sleep timer
+        <select id="sleepTimer">
+          <option value="off" selected>Off</option>
+          <option value="5">5 minutes</option>
+          <option value="10">10 minutes</option>
+          <option value="20">20 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="50">50 minutes</option>
+          <option value="60">60 minutes</option>
+          <option value="end">End of video</option>
+        </select>
+      </label>
+
+      <menu>
+        <button value="cancel" formnovalidate>Cancel</button>
+        <button id="saveBtn" value="default">Save</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <footer class="footerbar">
+    <div class="left">
+      Vibe coded by
+      <a href="https://www.linkedin.com/in/sandeepbaskaran/" target="_blank" rel="noopener noreferrer">Sandeep Baskaran</a>
+    </div>
+    <div class="right">
+      <a href="https://sandeepbaskaran.notion.site/256c0397ad848020bf6ff600da168f85?pvs=105" id="feedbackLink" target="_blank" rel="noopener noreferrer">Share feedback</a>
+    </div>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
