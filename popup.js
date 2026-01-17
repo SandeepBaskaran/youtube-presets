@@ -143,6 +143,13 @@ function openCreateDialog(existing) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  $$("#createBtn").addEventListener("click", () => openCreateDialog());
+  $$("#createBtn").addEventListener("click", async () => {
+    const all = await getPresets();
+    if (all.length >= 5) {
+      alert("You can have a maximum of 5 presets.");
+      return;
+    }
+    openCreateDialog();
+  });
   await hydrate();
 });

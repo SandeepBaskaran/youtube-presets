@@ -8,7 +8,6 @@
   --elev: #ffffff;
   --accent: #ff0033; /* YouTube red */
   --header-h: 56px;
-  --footer-h: 40px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,10 +25,11 @@ html, body {
   margin: 0;
   padding: 0;
   width: 360px;
-  min-height: 640px;
+  height: 600px;
   background: var(--bg);
   color: var(--fg);
   font: 13px/1.45 Roboto, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
 .appbar {
@@ -57,9 +57,6 @@ h1 { margin: 0; font-size: 14px; font-weight: 600; }
 #presets {
   padding: 10px; display: grid; gap: 10px;
   margin-top: var(--header-h);
-  margin-bottom: var(--footer-h);
-  max-height: calc(100vh - var(--header-h) - var(--footer-h));
-  overflow: auto;
 }
 
 .preset {
@@ -95,20 +92,6 @@ button.icon {
   color: var(--fg);
 }
 button.icon:hover { background: rgba(128,128,128,0.18); }
-
-footer { padding: 8px 12px; color: var(--muted); border-top: 1px solid var(--border); }
-
-.footerbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 2;
-  display: flex; align-items: center; justify-content: space-between;
-  height: var(--footer-h);
-  padding: 0 12px;
-  background: var(--elev);
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-}
-.footerbar a { color: var(--fg); text-decoration: none; font-weight: 600; }
-.footerbar a:hover { text-decoration: underline; }
 
 dialog::backdrop { background: rgba(0,0,0,0.4); }
 dialog {
