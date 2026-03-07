@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Presets",
   "description": "One-click presets for YouTube: speed, quality, and view mode.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "action": {
     "default_title": "YouTube Presets",
     "default_popup": "popup.html"
