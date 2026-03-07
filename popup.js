@@ -49,8 +49,7 @@ function renderPreset(p) {
       if (b !== btn) { b.textContent = "Apply"; b.classList.remove("applied"); }
     });
     setTimeout(() => {
-      btn.textContent = "Apply";
-      btn.classList.remove("applied");
+      window.close();
     }, 1200);
   });
   el.querySelector(".del").addEventListener("click", async () => {
