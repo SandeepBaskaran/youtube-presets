@@ -1,14 +1,47 @@
 {
   "manifest_version": 3,
   "name": "YouTube Presets",
-  "description": "One-click presets for YouTube: speed, quality, and view mode.",
+  "description": "Capture and apply YouTube presets for speed, quality, view mode, captions, volume, and sleep timer.",
   "version": "1.1.1",
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "YouTube Presets",
     "default_popup": "popup.html"
   },
   "permissions": ["storage", "scripting", "activeTab"],
   "host_permissions": ["https://www.youtube.com/*"],
+  "commands": {
+    "apply-preset-1": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1",
+        "mac": "Command+Shift+1"
+      },
+      "description": "Apply the first YouTube preset"
+    },
+    "apply-preset-2": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2",
+        "mac": "Command+Shift+2"
+      },
+      "description": "Apply the second YouTube preset"
+    },
+    "apply-preset-3": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3",
+        "mac": "Command+Shift+3"
+      },
+      "description": "Apply the third YouTube preset"
+    },
+    "apply-preset-4": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+4",
+        "mac": "Command+Shift+4"
+      },
+      "description": "Apply the fourth YouTube preset"
+    }
+  },
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",

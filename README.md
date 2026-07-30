@@ -1,81 +1,85 @@
-# YouTube Presets (Chrome Extension)
+# YouTube Presets
 
-One‑click presets for YouTube: playback speed, quality, view mode (default/theater/fullscreen/PiP), captions on/off, and a sleep timer. Designed with a clean Material/YouTube‑inspired UI and dark/light theme support.
+A focused Chrome extension for capturing and restoring complete YouTube player setups.
 
-## Features
+[**Install YouTube Presets from the Chrome Web Store**](https://chromewebstore.google.com/detail/youtube-presets/pkpaeeeaenkiihcebmpfdleiapmofgig)
 
-- Apply preset instantly to the active YouTube video tab
-- Controls saved per preset:
-  - Speed
-  - Quality (max/auto/exact like 2160/1440/1080/720)
-  - View mode (default/theater/fullscreen/PiP)
-  - Captions (on/off)
-  - Sleep timer (off, 5–60 min, end of video)
-- Create, edit, delete presets
-- Modern UI that adapts to system dark/light mode
-- Sticky header and footer for a polished panel experience
+## What's new in 1.2.0
 
-## Install (Developer Mode)
+- Capture the current player's speed, quality, view mode, captions, and volume when creating a preset.
+- Apply the first four presets with configurable Chrome keyboard shortcuts.
+- Keep preset creation clear at the five-preset limit with a disabled **+** button and tooltip.
+- Confirm before deleting a preset, and keep an intentionally empty preset list empty.
+- Use a cleaner card layout with **Delete**, **Edit**, and primary **Apply** actions.
+- Confirm a successful apply with **Applied**, then close the popup quickly and return focus to YouTube.
+- Preserve existing volume for presets saved before volume support.
 
-1. Download or clone this repository.
-2. Open Chrome and go to `chrome://extensions`.
-3. Enable "Developer mode" (toggle on the top right).
-4. Click "Load unpacked" and select the project folder.
-5. Pin the extension for quick access.
+## What it does
 
-## Usage
+- Capture the active player's settings when creating a preset.
+- Save up to five presets.
+- Set playback speed, available video quality, and volume.
+- Switch between default, theater, fullscreen, and picture-in-picture modes.
+- Turn captions on or off when they are available.
+- Pause playback after 5–60 minutes, or disable autoplay at the end of a video.
+- Apply the first four presets with configurable Chrome keyboard shortcuts.
+- Sync presets with `chrome.storage.sync`.
+- Close the popup automatically after YouTube confirms a preset was applied.
 
-1. Open a YouTube video page (URL starts with `https://www.youtube.com/`).
-2. Click the extension icon to open the popup.
-3. Click "Apply" on a preset, or use the + button to create a new preset.
-4. When applying:
-   - Speed/quality/view mode are set on the player.
-   - Captions are toggled if available for the video.
-   - Sleep timer pauses playback after the selected time (or disables autoplay for "End of video").
+## Install from source
 
-Notes:
-- Some videos may not offer captions; the captions toggle will be a no‑op.
-- If YouTube experiments change the settings menu structure, quality selection may require tweaks.
+This repository has no build step or runtime dependencies.
 
-## Files of interest
+1. Clone or download the repository.
+2. Open `chrome://extensions` in Chrome.
+3. Enable **Developer mode**.
+4. Select **Load unpacked**.
+5. Choose the repository root. For an acceptance-test build, choose its `dist` folder instead.
 
-- `manifest.json` — MV3 manifest with permissions and content scripts.
-- `popup.html`, `popup.css`, `popup.js` — Popup UI, theming, and preset management.
-- `content/applyPreset.js` — Injected into the YouTube page (MAIN world) to apply presets.
-- `content/util.js` — Utility helpers for DOM.
+Reload the extension from `chrome://extensions` after changing source files.
 
-## Configuring the footer links
+## Use
 
-The popup footer contains two links:
-- Left: "Vibe coded by Sandeep Baskaran" → LinkedIn.
-- Right: "Share feedback" → Notion form (or any feedback URL you choose).
+1. Open a video at `https://www.youtube.com/`.
+2. Open YouTube Presets.
+3. Apply an existing preset, or select **+** to capture the current player settings and create one.
 
-To change the feedback URL, edit `popup.html` and update the `href` of the element with `id="feedbackLink"`.
+After a successful apply, the popup briefly shows **Applied** and closes. If the YouTube player is unavailable, the popup stays open and shows an error.
 
-```html
-<a href="https://your-notion-form-url" id="feedbackLink" target="_blank" rel="noopener noreferrer">Share feedback</a>
-```
+When creating a preset, the generated name is selected automatically. Type to replace it, or save it as shown. At five presets, **+** remains disabled until a preset is deleted.
 
-## Development
+The first four presets can also be applied with `Ctrl+Shift+1` through `Ctrl+Shift+4` (`Command+Shift+1` through `Command+Shift+4` on macOS). Change or remove these shortcuts at `chrome://extensions/shortcuts`. The fifth preset remains available from the popup.
 
-- The extension uses `chrome.storage.sync` to store presets.
-- Applying presets uses `chrome.scripting.executeScript` targeting the page's MAIN world.
-- To iterate on styles or behavior:
-  1. Make changes in the repo.
-  2. Reload the extension from `chrome://extensions` (click Reload on the card).
-  3. Refresh the YouTube tab and test again.
+Quality choices depend on the current video. Captions are unchanged when a video has no caption track. Presets created before volume support leave the existing player volume unchanged. YouTube interface changes can affect quality and view-mode controls.
+
+## Project structure
+
+- `manifest.json`: Manifest V3 configuration and permissions.
+- `popup.html`, `popup.css`, `popup.js`: Preset management and popup interface.
+- `presetCore.js`: Shared storage, capture, and apply operations.
+- `background.js`: Keyboard shortcut commands.
+- `content/`: YouTube page integration code.
+- `icons/`: Extension icons.
+- `chrome-store-assets/`: Store listing images; not required at runtime.
 
 ## Permissions
 
-- `storage` — store presets across devices.
-- `scripting` — inject and execute the apply script on YouTube pages.
-- `activeTab` — operate on the active YouTube tab when you click Apply.
-- `host_permissions` — limited to `https://www.youtube.com/*`.
+- `storage`: Sync saved presets.
+- `scripting`: Run preset controls in the active YouTube page.
+- `activeTab`: Access the tab when Apply is clicked.
+- `https://www.youtube.com/*`: Limit page access to YouTube.
 
-## Contributing
+## Release checklist
 
-Pull requests and suggestions are welcome! Feel free to fork and customize presets or add more options (volume, subtitles language, looping, etc.).
+Load the extension unpacked and verify:
 
-## License
-
-MIT License. See `LICENSE` (add one if you plan to publish).
+- Apply from a playing YouTube video shows **Applied**, closes the popup, and returns focus to the page.
+- Apply from a non-YouTube tab or a YouTube page without a player leaves the popup open with an error.
+- Speed, quality, view mode, captions, and each sleep-timer mode work as expected.
+- Volume applies correctly, including 0%, while older presets leave volume unchanged.
+- Creating a preset captures the current settings and selects its generated name.
+- Capture failure falls back to editable defaults without blocking preset creation.
+- Shortcuts 1–4 apply the corresponding presets and safely do nothing for empty positions.
+- At five presets, **+** is disabled with an explanatory tooltip and re-enables after deletion.
+- Creating, editing, and syncing presets still work.
+- Delete opens a confirmation dialog and removes the preset only after confirmation.
