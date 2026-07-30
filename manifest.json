@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Presets",
   "description": "Capture and apply YouTube presets for speed, quality, view mode, captions, volume, and sleep timer.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "background": {
     "service_worker": "background.js"
   },
