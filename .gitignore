@@ -18,9 +18,11 @@ pnpm-debug.log*
 .env.*
 
 # Build output / coverage (if added later)
-dist/
+/dist
+/dist.pre-canonical-link/
 build/
 coverage/
+/.openclaw/
 
 # Packages / archives
 *.zip

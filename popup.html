@@ -12,27 +12,36 @@
       <img src="icons/icon32.png" alt="YouTube Presets" class="app-icon" />
       <h1>YouTube Presets</h1>
     </div>
-    <button id="createBtn" class="icon-btn" title="Create preset" aria-label="Create preset">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-      </svg>
-    </button>
+    <span id="createBtnWrapper" class="icon-btn-wrapper" title="Create preset">
+      <button id="createBtn" class="icon-btn" aria-label="Create preset">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+      </button>
+    </span>
   </header>
 
-  <section id="presets"></section>
+  <main>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section id="presets"></section>
+  </main>
 
   <dialog id="createDialog">
-    <form method="dialog" id="createForm">
-      <h2>Create Preset</h2>
+    <form id="createForm">
+      <h2 id="createDialogTitle">Create Preset</h2>
+      <p id="createHint" class="dialog-hint" role="status" aria-live="polite"></p>
 
       <label>
         Name
-        <input type="text" id="name" required placeholder="e.g., Speedy 2x + Theater" />
+        <input type="text" id="name" required maxlength="60" placeholder="e.g., Theater · 2× · 1080p" />
       </label>
 
       <label>
         Speed
         <select id="speed">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
           <option value="1">1.0×</option>
           <option value="1.25">1.25×</option>
           <option value="1.5">1.5×</option>
@@ -46,10 +55,16 @@
         Quality
         <select id="quality">
           <option value="max" selected>Max available</option>
+          <option value="4320">4320p</option>
+          <option value="2880">2880p</option>
           <option value="2160">2160p</option>
           <option value="1440">1440p</option>
           <option value="1080">1080p</option>
           <option value="720">720p</option>
+          <option value="480">480p</option>
+          <option value="360">360p</option>
+          <option value="240">240p</option>
+          <option value="144">144p</option>
           <option value="auto">Auto</option>
         </select>
       </label>
@@ -73,6 +88,24 @@
       </label>
 
       <label>
+        Volume
+        <select id="volume">
+          <option value="unchanged" selected>Leave unchanged</option>
+          <option value="0">0%</option>
+          <option value="10">10%</option>
+          <option value="20">20%</option>
+          <option value="30">30%</option>
+          <option value="40">40%</option>
+          <option value="50">50%</option>
+          <option value="60">60%</option>
+          <option value="70">70%</option>
+          <option value="80">80%</option>
+          <option value="90">90%</option>
+          <option value="100">100%</option>
+        </select>
+      </label>
+
+      <label>
         Sleep timer
         <select id="sleepTimer">
           <option value="off" selected>Off</option>
@@ -88,12 +121,24 @@
       </label>
 
       <menu>
-        <button value="cancel" formnovalidate>Cancel</button>
-        <button id="saveBtn" value="default">Save</button>
+        <button id="cancelCreateBtn" type="button">Cancel</button>
+        <button id="saveBtn" type="submit">Save</button>
       </menu>
     </form>
   </dialog>
 
+  <dialog id="deleteDialog" aria-labelledby="deleteDialogTitle">
+    <form method="dialog">
+      <h2 id="deleteDialogTitle">Delete preset?</h2>
+      <p>“<strong id="deletePresetName"></strong>” will be permanently deleted.</p>
+      <menu>
+        <button value="cancel">Cancel</button>
+        <button class="danger-button" value="delete">Delete</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="presetCore.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

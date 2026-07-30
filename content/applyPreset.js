@@ -1,7 +1,5 @@
 /* content/applyPreset.js */
 (() => {
-    if (window.__ytp_applyPreset) return; // idempotent
-  
     async function ensurePlayer() {
       // Wait for the <video> and the main flexy container
       const video = document.querySelector("video");
@@ -14,6 +12,17 @@
       try {
         video.playbackRate = speed; // reliable HTMLMediaElement API
       } catch {}
+    }
+
+    function setVolume(video, volume) {
+      if (volume === "unchanged" || volume === null || volume === undefined) return;
+
+      const numericVolume = Number(volume);
+      if (!Number.isFinite(numericVolume)) return;
+
+      const level = Math.min(100, Math.max(0, numericVolume));
+      video.volume = level / 100;
+      video.muted = level === 0;
     }
   
     async function setViewMode({ video, flexy }, mode) {
@@ -109,6 +118,41 @@
       if (mode === 'off' && pressed) btn.click();
     }
 
+    function getCurrentQuality() {
+      const player = document.querySelector("#movie_player");
+      const qualityLevel = player?.getPlaybackQuality?.();
+      const qualityMap = {
+        highres: "max",
+        hd4320: "4320",
+        hd2880: "2880",
+        hd2160: "2160",
+        hd1440: "1440",
+        hd1080: "1080",
+        hd720: "720",
+        large: "480",
+        medium: "360",
+        small: "240",
+        tiny: "144",
+        auto: "auto"
+      };
+
+      if (qualityMap[qualityLevel]) return qualityMap[qualityLevel];
+      const numericQuality = String(qualityLevel || "").match(/(\d{3,4})/);
+      return numericQuality?.[1] || "auto";
+    }
+
+    function getCurrentViewMode(flexy) {
+      if (document.pictureInPictureElement) return "pip";
+      if (document.fullscreenElement) return "fullscreen";
+      if (flexy?.hasAttribute("theater")) return "theater";
+      return "default";
+    }
+
+    function getCurrentCaptions() {
+      const button = document.querySelector(".ytp-subtitles-button");
+      return button?.getAttribute("aria-pressed") === "true" ? "on" : "off";
+    }
+
     function maybeDisableAutoplay() {
       // Try to turn off autoplay so playback doesn't continue after end
       const auto = document.querySelector('.ytp-autonav-toggle-button');
@@ -148,13 +192,33 @@
       setSpeed(ctx.video, preset.speed);
       try { await setQuality(preset.quality); } catch {}
 
-      // Theater/fullscreen/PiP last so UI state ends where user expects
-      try { await setViewMode(ctx, preset.viewMode); } catch {}
-
       // Captions toggle
       try { setCaptions(preset.captions); } catch {}
 
+      // Volume is optional so presets created before volume support remain unchanged.
+      try { setVolume(ctx.video, preset.volume); } catch {}
+
       // Sleep timer setup
       try { setupSleepTimer(ctx.video, preset.sleepTimer); } catch {}
+
+      // Theater/fullscreen/PiP last so UI state ends where user expects
+      try { await setViewMode(ctx, preset.viewMode); } catch {}
+
+      return { ok: true };
+    };
+
+    window.__ytp_capturePreset = async function capturePreset() {
+      const { video, flexy } = await ensurePlayer();
+      return {
+        ok: true,
+        preset: {
+          speed: Number(video.playbackRate.toFixed(2)),
+          quality: getCurrentQuality(),
+          viewMode: getCurrentViewMode(flexy),
+          captions: getCurrentCaptions(),
+          sleepTimer: "off",
+          volume: Math.round((video.muted ? 0 : video.volume) * 100)
+        }
+      };
     };
   })();
